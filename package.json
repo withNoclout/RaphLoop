@@ -1,0 +1,34 @@
+{
+  "name": "raphloop",
+  "version": "1.0.0",
+  "description": "RAPH-LOOP GRAVITY MODULE - Autonomous iteration protocol for AntiGravity",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "node dist/index.js",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "antigravity",
+    "autonomous",
+    "iteration",
+    "code-fixing",
+    "testing",
+    "automation"
+  ],
+  "author": "withNoclout",
+  "license": "Proprietary",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/withNoclout/RaphLoop.git"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "triggerCommands": ["/raph", "/raph-loop"],
+  "maxIterations": 5,
+  "verificationTimeout": 30000,
+  "cleanupOnCompletion": true,
+  "workingDirectory": ".",
+  "integration": {
+    "version": "2.0.0",
+    "platform": "AntiGravity",
+    "protocol": "RAPH-LOOP-GRAVITY-MODULE",
+    "description": "Multi-agent autonomous iteration protocol for code fixing"
+  },
+  "features": {
+    "autoVerification": true,
+    "errorAnalysis": true,
+    "codeFixing": true,
+    "iterationTracking": true,
+    "cleanupOnSuccess": true,
+    "multiAgentOrchestration": true,
+    "astAnalysis": true,
+    "executionMemory": true,
+    "problemClassification": true
+  },
+  "iterations": {
+    "simple": 5,
+    "moderate": 8,
+    "complex": 12,
+    "multiAgent": 15,
+    "iterationTimeout": 30000,
+    "enableMemory": true,
+    "enableASTAnalysis": true
+  },
+  "specialistAgents": {
+    "dataAnalysis": {
+      "enabled": true,
+      "maxIterations": 7,
+      "confidence": 0.75
+    },
+    "architecture": {
+      "enabled": false,
+      "maxIterations": 10,
+      "confidence": 0.7
+    },
+    "testing": {
+      "enabled": false,
+      "maxIterations": 8,
+      "confidence": 0.75
+    },
+    "performance": {
+      "enabled": false,
+      "maxIterations": 10,
+      "confidence": 0.65
+    },
+    "security": {
+      "enabled": false,
+      "maxIterations": 8,
+      "confidence": 0.8
+    }
+  },
+  "astAnalysis": {
+    "enabled": true,
+    "deepAnalysis": true,
+    "detectCycles": true,
+    "findOrphans": true,
+    "calculateMetrics": true
+  },
+  "supportedLanguages": [
+    "javascript",
+    "typescript",
+    "python",
+    "sql"
+  ],
+  "supportedFrameworks": [
+    "node",
+    "react",
+    "nextjs",
+    "jest",
+    "pytest",
+    "mocha"
+  ]
+}
