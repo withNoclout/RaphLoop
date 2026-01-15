@@ -1,0 +1,329 @@
+---
+name: raph-loop
+description: RAPH-LOOP v3.0 - Autonomous code iteration protocol with Web Dev Specialist capabilities
+version: 3.0.0
+author: RAPH-LOOP Team
+license: MIT
+---
+
+# RAPH-LOOP v3.0 Model Context Protocol (MCP)
+
+## Overview
+RAPH-LOOP v3.0 is an autonomous iteration protocol that fixes code until verification passes. It now includes specialized agents for Full-Stack Web Development, Session Management, and AST-safe UI refactoring.
+
+## Core Features
+
+### 1. Three-Phase Protocol
+- **Phase 1: PROBE** - Analyze request, create verification script
+- **Phase 2: LOOP** - Run verification, analyze errors, apply fixes iteratively
+- **Phase 3: COMPLETION** - Verify success, cleanup, report results
+
+### 2. Specialist Agents
+- **Data Analysis Agent** - SQL, parsing, validation, transformation issues
+- **Web Development Agent** - Session, Auth, State Management, Middleware
+- **UI Refactoring Agent** - AST-safe React/Vue component modifications
+- **General Agent** - Fallback for other issues
+
+### 3. Session Trace Protocol (NEW IN v3.0)
+Three-step sequential verification for session issues:
+- **Step A**: Backend verification (API returns user object)
+- **Step B**: Network verification (Credentials/headers sent)
+- **Step C**: Frontend verification (Global store receiving updates)
+
+### 4. AST-Safe Code Modification
+Never uses string replacement. Performs semantic transformations:
+- Hook dependency array fixes
+- Render block modifications
+- State management updates
+- SSR hydration fixes
+
+## Integration Points
+
+### For Next.js Projects
+```bash
+# Automatic detection of Next.js + NextAuth
+# Verifies:
+# - [...nextauth].js configuration
+# - Provider setup in _app.tsx
+# - useSession() hook in components
+# - Session persistence
+```
+
+### For Express Projects
+```bash
+# Automatic detection of Express middleware
+# Verifies:
+# - Middleware order
+# - Session storage (Redis, database)
+# - Authentication strategy
+# - Credentials handling
+```
+
+### For React Projects
+```bash
+# Automatic detection of state management
+# Supports:
+# - React Context API
+# - Redux / Redux-Persist
+# - Zustand
+# - Jotai
+# Verifies state sync with backend
+```
+
+## Usage
+
+### Triggering RAPH-LOOP
+```bash
+/raph fix the session management issue
+/raph-loop make login work properly
+/raph resolve authentication errors
+```
+
+### Session Issues
+When detecting session/auth keywords, automatically:
+1. Identifies framework (NextAuth, Express, etc.)
+2. Runs Session Trace Protocol (A → B → C)
+3. Generates test suite for verification
+4. Applies fixes with AST-safe refactoring
+
+### UI Issues
+When detecting component/render keywords, automatically:
+1. Parses component AST
+2. Identifies hooks and render blocks
+3. Generates surgical fixes
+4. Verifies no syntax breakage
+
+## Specialist Agent Selection
+
+### Web Development Agent Selected When:
+- Request mentions: login, auth, session, cookie, bearer, redirect, middleware
+- Codebase detected: NextAuth, Express, Passport, Firebase Auth
+- Error includes: 401, 403, CORS, hydration, blank component
+
+### UI Refactoring Agent Selected When:
+- Request mentions: component, rendering, hook, state, blank, hydration
+- Error keywords: useEffect, useState, dependency, hydration
+- Files modified: .tsx, .jsx, React components
+
+### Data Analysis Agent Selected When:
+- Request mentions: SQL, database, query, parsing, validation, data
+- Error includes: database error, parsing error, validation error
+- Files: .sql, database queries, data transformation logic
+
+## Configuration
+
+### .cursorrules Integration
+RAPH-LOOP v3.0 includes comprehensive `.cursorrules` file with:
+- Framework-aware debugging protocol
+- Session trace step-by-step guide
+- AST-safe modification patterns
+- Common web dev fixes and patterns
+- Verification checklist
+
+### anti-gravity.json Settings
+```json
+{
+  "webDevSpecialist": {
+    "enabled": true,
+    "maxIterations": 12,
+    "sessionTraceEnabled": true,
+    "astSafeRefactoring": true
+  },
+  "frameworks": ["nextauth", "express", "nestjs", "fastapi"],
+  "storageTypes": ["cookies", "jwt", "localStorage", "redis"]
+}
+```
+
+## Session Trace Protocol Details
+
+### Step A: Backend Verification
+Checks:
+- API endpoint exists (/api/auth/me, /auth/session)
+- Returns user object structure
+- All required fields present (id, email, role)
+- Response is valid JSON
+- No server errors (5xx)
+
+### Step B: Network Verification
+Checks:
+- Fetch/Axios configured with credentials
+- Cookies sent in requests (if cookie-based)
+- Authorization header sent (if JWT-based)
+- CORS properly configured
+- Response includes auth data
+
+### Step C: Frontend Verification
+Checks:
+- State management exists (Context, Redux, Zustand)
+- Auth state updates after login
+- State persists on page refresh
+- Components access updated state
+- Logout clears all session data
+
+### Auto-Generated Tests
+Creates complete test suite:
+```typescript
+// Step A Tests: Verify API response
+// Step B Tests: Verify network configuration
+// Step C Tests: Verify state management
+// Edge cases: Session expiration, refresh, multi-tab sync
+```
+
+## AST-Safe UI Refactoring
+
+### Never Uses String Replacement
+Instead performs semantic transformations:
+
+```typescript
+// Analysis before modification:
+1. Parse component into AST
+2. Locate exact hook/render block
+3. Identify all references
+4. Plan surgery carefully
+5. Apply precise modification
+6. Verify syntax integrity
+```
+
+### Supported Hook Fixes
+- useState dependency updates
+- useEffect dependency arrays
+- useContext subscription issues
+- useCallback/useMemo optimization
+- useRef initialization
+
+### Supported Render Fixes
+- Loading state addition
+- Conditional render logic
+- SSR hydration fixes
+- Fallback UI injection
+- Error boundary wrapping
+
+## Verification
+
+After fixes applied, verification includes:
+1. TypeScript compilation check
+2. Syntax validation
+3. Hook dependency analysis
+4. Test execution (if exists)
+5. Component render check
+
+## Output and Reporting
+
+RAPH-LOOP v3.0 provides:
+- **Session Trace Results**: Step A/B/C verification with findings
+- **Code Changes**: Detailed list of modifications
+- **Test Report**: Test execution results
+- **Recommendations**: Next steps if issues remain
+- **Performance**: Iteration count, time elapsed
+
+## Limitations and Constraints
+
+### Session Trace Protocol
+- Only works with standard frameworks (NextAuth, Express, etc.)
+- Requires API endpoint at standard path
+- Assumes REST API (not GraphQL)
+- May need manual verification for custom auth
+
+### AST-Safe Refactoring
+- Best results with TypeScript/JSX
+- May need manual review for complex hooks
+- Doesn't refactor prop drilling (use Context/Redux)
+- Can't fix architectural issues (needs redesign)
+
+## Compatibility
+
+### Supported Languages
+- TypeScript / JavaScript
+- Python
+- Java / C#
+- Go
+- Rust (planned v3.1)
+
+### Supported Frameworks
+**Frontend:**
+- React / Next.js (with NextAuth, Firebase Auth, custom)
+- Vue.js (Nuxt, Pinia)
+- Angular
+
+**Backend:**
+- Express.js
+- NestJS
+- FastAPI
+- Django
+- Spring Boot
+- Laravel
+
+**State Management:**
+- React Context API
+- Redux / Redux-Persist
+- Zustand
+- MobX
+- Jotai
+
+## Advanced Features
+
+### Execution Memory
+Learns from previous iterations:
+- Caches successful solutions
+- Detects similar problems
+- Reuses proven approaches
+- Avoids repeated failures
+
+### Multi-Agent Orchestration
+Coordinates multiple specialists:
+- Routes to best agent for problem type
+- Runs agents sequentially or parallel
+- Aggregates results
+- Fallback if primary agent fails
+
+### AST Analysis
+Semantic code understanding:
+- Dependency graph building
+- Cycle detection
+- Code metrics (complexity, modularity)
+- Orphan code finding
+
+## Best Practices
+
+1. **Session Issues**: Always follow A → B → C (don't skip steps)
+2. **UI Fixes**: Let agent do AST analysis before modifying
+3. **Framework Detection**: Verify detected framework before proceeding
+4. **Testing**: Always run generated test suite
+5. **Verification**: Check all three checkpoints before declaring success
+
+## Troubleshooting
+
+### Session Trace Says FAIL at Step A
+- Check backend API returns proper user object
+- Verify response includes required fields
+- Check for 5xx server errors
+- Review authentication logic
+
+### Session Trace Says FAIL at Step B
+- Check fetch/axios has credentials: 'include'
+- Verify CORS allows credentials
+- Check browser network tab for auth headers
+- Review cookie flags (httpOnly, secure, sameSite)
+
+### Session Trace Says FAIL at Step C
+- Check state management is set up
+- Verify components subscribe to auth state
+- Check localStorage/sessionStorage persistence
+- Review state update logic on login
+
+## Future Enhancements (v3.1+)
+
+- [ ] GraphQL API support
+- [ ] Rust language support
+- [ ] Real-time debugging with browser DevTools
+- [ ] Video session recording for debugging
+- [ ] AI-powered root cause analysis
+- [ ] Parallel agent execution
+- [ ] Custom framework plugins
+- [ ] CI/CD integration hooks
+
+---
+
+**Version**: 3.0.0  
+**Last Updated**: January 2026  
+**Status**: Production Ready

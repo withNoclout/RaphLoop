@@ -14,7 +14,9 @@ export enum AgentSpecialty {
   ARCHITECTURE = 'architecture',
   TESTING = 'testing',
   PERFORMANCE = 'performance',
-  SECURITY = 'security'
+  SECURITY = 'security',
+  WEB_DEVELOPMENT = 'web_development',
+  UI_REFACTORING = 'ui_refactoring'
 }
 
 /**

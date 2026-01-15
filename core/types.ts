@@ -224,3 +224,73 @@ export interface IterationConfiguration {
   /** Enable AST analysis */
   enableASTAnalysis: boolean;
 }
+
+/**
+ * Web development related enums and interfaces
+ */
+
+/**
+ * Web frameworks
+ */
+export enum WebFrameworkType {
+  NEXTAUTH = 'nextauth',
+  EXPRESS = 'express',
+  NESTJS = 'nestjs',
+  FASTAPI = 'fastapi',
+  DJANGO = 'django',
+  SPRING = 'spring',
+  LARAVEL = 'laravel',
+  UNKNOWN = 'unknown'
+}
+
+/**
+ * Session storage types
+ */
+export enum SessionStorageType {
+  COOKIES = 'cookies',
+  LOCAL_STORAGE = 'local_storage',
+  SESSION_STORAGE = 'session_storage',
+  REDIS = 'redis',
+  DATABASE = 'database',
+  JWT = 'jwt',
+  UNKNOWN = 'unknown'
+}
+
+/**
+ * Web development problem types
+ */
+export enum WebProblemType {
+  SESSION_NOT_UPDATING = 'session_not_updating',
+  LOGIN_FAILURE = 'login_failure',
+  AUTH_REDIRECT = 'auth_redirect',
+  STATE_MISMATCH = 'state_mismatch',
+  COMPONENT_BLANK = 'component_blank',
+  HYDRATION_MISMATCH = 'hydration_mismatch',
+  CSRF_ERROR = 'csrf_error',
+  CORS_ERROR = 'cors_error',
+  MIDDLEWARE_CHAIN = 'middleware_chain',
+  UI_NOT_RENDERING = 'ui_not_rendering'
+}
+
+/**
+ * Session trace step
+ */
+export interface SessionTraceStep {
+  step: 'A' | 'B' | 'C';
+  name: string;
+  description: string;
+  verified: boolean;
+  findings: string[];
+}
+
+/**
+ * Web development verification context
+ */
+export interface WebDevVerificationContext {
+  framework: WebFrameworkType;
+  storage: SessionStorageType;
+  problemType: WebProblemType;
+  components: string[];
+  apiEndpoints: string[];
+  stateManagement: string[];
+}

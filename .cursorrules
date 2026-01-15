@@ -1,0 +1,375 @@
+# RAPH-LOOP v3.0 Cursor Rules
+# Full-Stack Web Development Stability & Session Management Protocols
+
+## 🎯 Core Principle
+When fixing Full-Stack Web Development issues, ALWAYS follow the **Framework-Aware Debugging** and **Session Trace Protocol** before applying code changes.
+
+---
+
+## 📋 1. FRAMEWORK-AWARE DEBUGGING PROTOCOL
+
+### When to Activate
+Trigger this protocol when:
+- User reports: "Login broken", "Session not updating", "Auth failing"
+- Issue keywords: `Session`, `Auth`, `Login`, `State`, `Cookie`, `Header`
+- Components involved: Authentication, Authorization, Middleware chains
+
+### Framework Detection
+```
+IF code mentions NextAuth OR has pages/api/auth/ → NEXTAUTH
+IF code mentions express OR app.use() → EXPRESS
+IF code mentions @nestjs OR @Injectable → NESTJS
+IF code mentions FastAPI OR @app.route → FASTAPI
+IF code mentions Django OR views.py → DJANGO
+IF code mentions @SpringBoot OR @RestController → SPRING
+IF code mentions Laravel OR Route:: → LARAVEL
+```
+
+### Mandatory Steps (Do NOT skip)
+
+#### Step 1: IDENTIFY THE FRAMEWORK
+```typescript
+// Read: package.json, imports, decorators, middleware files
+// Action: Determine framework and version
+// Output: Framework name, version, key files
+```
+
+#### Step 2: VERIFY THE MIDDLEWARE CHAIN
+```typescript
+// For NextAuth: Check [...nextauth].ts/js
+// For Express: Check app.use() order and middleware stack
+// For NestJS: Check Module decorators and guards
+// For FastAPI: Check dependencies and middleware order
+
+// Verify:
+// - Middleware is in CORRECT ORDER (auth before protected routes)
+// - Middleware returns proper response/error
+// - Session created BEFORE used in subsequent middleware
+```
+
+#### Step 3: VERIFY STORAGE PERSISTENCE
+```typescript
+// Check HOW session is stored:
+// IF cookies → Verify httpOnly, secure, sameSite flags
+// IF localStorage → Verify data survives page refresh
+// IF sessionStorage → Verify cleared on tab close
+// IF JWT → Verify token in Authorization header
+// IF Redis/DB → Verify backend store configured
+
+// Action: DO NOT just add credentials, verify the STORAGE mechanism
+```
+
+---
+
+## 📋 2. SESSION TRACE PROTOCOL
+
+**MANDATORY**: When user reports session issues, execute this 3-step verification:
+
+### Step A: Backend Verification
+```
+Question: "Is the API returning the user object?"
+
+Verify:
+✓ /api/auth/me endpoint exists
+✓ Returns { user: {...}, token?: ... } structure
+✓ User object contains: id, email, role, name
+✓ No server errors (500, 503)
+✓ Response time < 500ms
+
+If FAIL:
+  → Backend must return complete user object
+  → Check authentication logic
+  → Verify database query for current user
+  
+If PASS:
+  → Continue to Step B
+```
+
+### Step B: Network Verification
+```
+Question: "Are cookies/headers being sent in requests?"
+
+Verify:
+✓ Fetch/Axios includes credentials: 'include' or headers
+✓ Cookies set with httpOnly flag (can't access via JS)
+✓ Authorization header sent as: "Bearer <token>"
+✓ CORS allows credentials (Access-Control-Allow-Credentials: true)
+✓ Network tab shows Cookie/Authorization headers in both Request & Response
+
+If FAIL:
+  → Must configure credentials in ALL API calls
+  → Fetch: { credentials: 'include' }
+  → Axios: { withCredentials: true }
+  
+If PASS:
+  → Continue to Step C
+```
+
+### Step C: Frontend Verification
+```
+Question: "Is the Global Store receiving and persisting the session?"
+
+Verify:
+✓ State management exists (Context API / Redux / Zustand)
+✓ Auth context/store subscribes to API response
+✓ User state updates immediately after login
+✓ User state persists on page refresh
+✓ User state clears on logout
+✓ Components receive updated state via hooks/selectors
+
+If FAIL:
+  → State management must be connected to backend
+  → useAuth(), useSelector(), or useStore() must return live data
+  → Add localStorage/sessionStorage persistence layer
+  
+If PASS:
+  → Session management is working
+```
+
+---
+
+## 📋 3. AST-SAFE UI REFACTORING PROTOCOL
+
+### When to Activate
+Trigger when fixing:
+- React/Vue component rendering issues
+- Hook dependency array warnings
+- State management bugs in UI components
+- Hydration mismatches (Next.js SSR)
+
+### Rule: NEVER USE SIMPLE STRING REPLACEMENT
+
+❌ **WRONG** (Breaks surrounding code):
+```typescript
+// Original
+const [user, setUser] = useState(null);
+const [data, setData] = useState([]);
+
+// Attempted fix with string replace:
+const [userData, setUserData] = useState(null);  // ← Breaks other setUser() calls!
+```
+
+✅ **RIGHT** (Surgical AST-aware fix):
+```typescript
+// 1. Locate the EXACT hook line
+// 2. Understand all references to 'user'
+// 3. Update:
+//    a) Hook declaration
+//    b) All setUser() calls
+//    c) All references in JSX/callbacks
+```
+
+### Surgical Modification Steps
+
+#### For useState/useEffect Hooks:
+```
+Step 1: Find the hook on specific line
+Step 2: Check dependency array (if useEffect)
+Step 3: Verify no stale closures
+Step 4: Update ONLY the hook logic
+Step 5: Run TypeScript check to verify types
+```
+
+#### For Render Blocks:
+```
+Step 1: Locate return statement / JSX block
+Step 2: Identify condition (if conditional render)
+Step 3: Find the EXACT location to modify
+Step 4: Inject loading state or fallback UI
+Step 5: Verify closing tags match
+```
+
+#### For Component State Updates:
+```
+Step 1: Find setUser/setState call
+Step 2: Understand data structure
+Step 3: Verify Redux action/Context dispatch
+Step 4: Check if UI subscribes to change
+Step 5: Test state update propagates to render
+```
+
+---
+
+## 📋 4. SESSION TRACE TEST GENERATION
+
+### Auto-Generate Test Suite
+When session issue is identified, AUTOMATICALLY create test file:
+
+```
+Location: src/__tests__/session-trace.test.ts
+
+Contains:
+✓ Step A Tests: Verify API returns user
+✓ Step B Tests: Verify network sends credentials  
+✓ Step C Tests: Verify frontend state updates
+
+Run: `npm test session-trace.test.ts`
+```
+
+---
+
+## 📋 5. DIRECTIVES FOR SPECIFIC FRAMEWORKS
+
+### NextAuth.js
+```
+Key Files: pages/api/auth/[...nextauth].js
+
+Verify:
+✓ Providers configured (OAuth, Credentials, etc)
+✓ Callbacks defined: signIn, redirect, session, jwt
+✓ JWT strategy OR database session
+✓ getSession() called on client side
+✓ useSession() hook in components
+✓ <SessionProvider> wraps app
+```
+
+### Express + Passport
+```
+Key Files: routes/auth.js, middleware/auth.js
+
+Verify:
+✓ passport.initialize() before routes
+✓ Session middleware configured
+✓ req.user populated after auth
+✓ res.json({ user: req.user })
+✓ Credentials sent in fetch
+```
+
+### React Context + Custom API
+```
+Key Files: context/AuthContext.tsx, hooks/useAuth.ts
+
+Verify:
+✓ Context provider wraps app
+✓ useEffect fetches current user
+✓ localStorage saves session
+✓ useEffect re-fetches on app load
+```
+
+### Redux + Redux-Persist
+```
+Key Files: store.ts, slices/authSlice.ts
+
+Verify:
+✓ persistor configured in store
+✓ authSlice updates on login
+✓ Middleware fetches user on app init
+✓ localStorage syncs state
+```
+
+---
+
+## 📋 6. COMMON PATTERNS & FIXES
+
+### Pattern: Session Not Updating After Login
+```
+Root Cause: 
+- API returns user, but frontend state not updated
+- Or: Frontend state updated, but not persisted
+
+Fix:
+1. Add useEffect to sync with backend
+2. Store in localStorage/sessionStorage
+3. Restore on app load from storage
+4. Add periodic refresh (optional)
+```
+
+### Pattern: Blank Component After Login
+```
+Root Cause:
+- Component renders before state loads
+- Conditional render hiding content
+- SSR hydration mismatch (Next.js)
+
+Fix:
+1. Add loading state
+2. Render fallback/skeleton while loading
+3. Wrap SSR component in useEffect + mounted check
+```
+
+### Pattern: Login Redirect Loop
+```
+Root Cause:
+- Middleware not setting session correctly
+- Session verification failing
+- Redirect logic incorrect
+
+Fix:
+1. Verify Step A (backend returns user)
+2. Verify Step B (credentials sent)
+3. Verify Step C (frontend receives update)
+4. Check redirect conditions
+```
+
+---
+
+## 📋 7. DO's and DON'Ts
+
+### ✅ DO:
+- Read ENTIRE middleware chain before modifying
+- Check storage mechanism (cookies/localStorage/JWT)
+- Use Session Trace Protocol (A → B → C)
+- Wrap component in useEffect for SSR issues
+- Test with mock session data first
+- Verify dependency arrays in useEffect
+- Generate test suite for session fixes
+
+### ❌ DON'T:
+- Use string replacement on component hooks
+- Modify session handling without checking storage
+- Skip network credential configuration
+- Assume state updates without verification
+- Apply fixes to multiple components without understanding impact
+- Ignore middleware order in Express/NestJS
+- Use localStorage without considering privacy/incognito mode
+
+---
+
+## 📋 8. VERIFICATION CHECKLIST
+
+After implementing session/auth fixes, verify:
+
+```
+Backend:
+  ✓ API endpoint returns user object
+  ✓ Response includes required fields
+  ✓ No server errors
+
+Network:
+  ✓ Credentials sent in requests
+  ✓ Cookies/headers in both request & response
+  ✓ CORS configured if needed
+
+Frontend:
+  ✓ State management receives data
+  ✓ Data persists on refresh
+  ✓ Components render with user data
+  ✓ Logout clears all data
+
+Tests:
+  ✓ Session trace tests pass
+  ✓ No console errors
+  ✓ All hooks have correct dependencies
+```
+
+---
+
+## 🚀 QUICK COMMAND
+
+When user says: "Session not updating" or "Login broken"
+
+RESPONSE:
+```
+1️⃣ Framework detected: [NEXTAUTH/EXPRESS/etc]
+2️⃣ Running Session Trace Protocol...
+   ✓ Step A: Backend check → [PASS/FAIL]
+   ✓ Step B: Network check → [PASS/FAIL]
+   ✓ Step C: Frontend check → [PASS/FAIL]
+3️⃣ Root cause: [IDENTIFIED]
+4️⃣ Fixing with AST-safe refactoring...
+5️⃣ Generating tests...
+```
+
+---
+
+**Remember: Always trace from backend → network → frontend. Never assume.**

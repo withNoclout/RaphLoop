@@ -162,6 +162,29 @@ export class MultiAgentOrchestrator {
   ): AgentSpecialty[] {
     const suggested: AgentSpecialty[] = [];
     const request = (context.request || '').toLowerCase();
+    const codebase = (context.codebaseContext || '').toLowerCase();
+
+    // Check for web development needs (HIGHEST PRIORITY IN v3.0)
+    const webDevKeywords = [
+      'session', 'login', 'auth', 'cookie', 'bearer', 'token',
+      'nextauth', 'express', 'nestjs', 'fastapi', 'django',
+      'middleware', 'redirect', 'csrf', 'cors', 'credential',
+      'hydration', 'useeffect', 'usestate', 'context', 'redux', 'zustand'
+    ];
+    const hasWebDevKeyword = webDevKeywords.some(kw => request.includes(kw) || codebase.includes(kw));
+    if (hasWebDevKeyword) {
+      suggested.push(AgentSpecialty.WEB_DEVELOPMENT);
+    }
+
+    // Check for UI refactoring needs
+    const uiKeywords = [
+      'component', 'render', 'blank', 'display', 'hook', 'state',
+      'react', 'vue', 'jsx', 'tsx', 'useeffect', 'usestate'
+    ];
+    const hasUIKeyword = uiKeywords.some(kw => request.includes(kw) || codebase.includes(kw));
+    if (hasUIKeyword && !suggested.includes(AgentSpecialty.WEB_DEVELOPMENT)) {
+      suggested.push(AgentSpecialty.UI_REFACTORING);
+    }
 
     // Check for data analysis needs
     if (request.includes('data') || request.includes('query') || request.includes('sql') ||
@@ -188,7 +211,7 @@ export class MultiAgentOrchestrator {
 
     // Check for security needs
     if (request.includes('security') || request.includes('vulnerable') || 
-        request.includes('auth') || request.includes('encrypt')) {
+        request.includes('encrypt')) {
       suggested.push(AgentSpecialty.SECURITY);
     }
 
